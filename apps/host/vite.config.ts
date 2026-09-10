@@ -1,6 +1,8 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import federation from '@originjs/vite-plugin-federation';
+import tailwindcss from '@tailwindcss/postcss';
+import autoprefixer from 'autoprefixer';
 
 export default defineConfig({
   plugins: [
@@ -14,11 +16,25 @@ export default defineConfig({
       shared: ['react', 'react-dom'],
     }),
   ],
+  css: {
+    postcss: {
+      plugins: [
+        tailwindcss(),
+        autoprefixer(),
+      ],
+    },
+  },
   server: {
+    port: 3000,
+    strictPort: true,
+  },
+  preview: {
     port: 3000,
     strictPort: true,
   },
   build: {
     target: 'esnext',
-  },
+    minify: false,
+    cssCodeSplit: false,
+  }
 });

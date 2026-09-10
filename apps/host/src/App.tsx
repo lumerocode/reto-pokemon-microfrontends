@@ -1,122 +1,39 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import React, { Suspense } from 'react';
 
-function App() {
-  const [count, setCount] = useState(0)
+const RemotePokemonDetail = React.lazy(() => import('mfe_detail/PokemonDetail'));
+const RemotePokemonHistory = React.lazy(() => import('mfe_history/PokemonHistory'));
 
+export function App() {
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
+    <main className="min-h-screen bg-slate-900 text-slate-100 p-8">
+      <div className="max-w-3xl mx-auto space-y-8">
+        <header className="border-b border-slate-800 pb-4">
+          <h1 className="text-3xl font-extrabold text-indigo-400">
+            Host Application (Port 3000)
+          </h1>
+          <p className="text-sm text-slate-400 mt-1">
+            Verificando comunicación y renderizado dinámico de microfrontends.
           </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+        </header>
 
-      <div className="ticks"></div>
+        {/* Microfrontend: Detail */}
+        <section className="space-y-3">
+          <h2 className="text-lg font-semibold text-slate-300">Remote: MFE Detail</h2>
+          <Suspense fallback={<div className="p-4 bg-slate-800 animate-pulse rounded-xl">Cargando MFE Detail...</div>}>
+            <RemotePokemonDetail pokemonId={25} />
+          </Suspense>
+        </section>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+        {/* Microfrontend: Record */}
+        <section className="space-y-3">
+          <h2 className="text-lg font-semibold text-slate-300">Remote: MFE Record</h2>
+          <Suspense fallback={<div className="p-4 bg-slate-800 animate-pulse rounded-xl">Cargando MFE Record...</div>}>
+            <RemotePokemonHistory onSelectPokemon={(id) => alert(`Pokemon seleccionado desde MFE Record: #${id}`)} />
+          </Suspense>
+        </section>
+      </div>
+    </main>
+  );
 }
 
-export default App
+export default App;
