@@ -1,0 +1,12 @@
+{
+  "name": "reto-pokemon-microfrontends",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "pnpm --parallel --filter \"./apps/*\" dev",
+    "build": "pnpm --filter \"./apps/*\" build"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  }
+}
