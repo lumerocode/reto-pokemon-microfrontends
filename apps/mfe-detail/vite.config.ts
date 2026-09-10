@@ -11,7 +11,7 @@ export default defineConfig({
       exposes: {
         './PokemonDetail': './src/components/PokemonDetail.tsx',
       },
-      shared: ['react', 'react-dom'],
+      shared: ['react', 'react-dom', 'zustand', '@tanstack/react-query'],
     }),
   ],
   server: {

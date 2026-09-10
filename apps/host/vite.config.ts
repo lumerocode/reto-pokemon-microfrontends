@@ -9,21 +9,25 @@ export default defineConfig({
     react(),
     (federation as unknown as typeof federation.default)({
       name: 'host',
+      filename: 'remoteEntry.js',
+      exposes: {
+        './store': './src/store/useAppStore.ts',
+      },
       remotes: {
         mfe_detail: 'http://localhost:3001/assets/remoteEntry.js',
         mfe_history: 'http://localhost:3002/assets/remoteEntry.js',
       },
-      shared: ['react', 'react-dom'],
+      shared: ['react', 'react-dom', 'zustand', '@tanstack/react-query'],
     }),
   ],
   css: {
-    postcss: {
+    postcss: {    
       plugins: [
         tailwindcss(),
         autoprefixer(),
       ],
     },
-  },
+  },  
   server: {
     port: 3000,
     strictPort: true,
@@ -32,9 +36,9 @@ export default defineConfig({
     port: 3000,
     strictPort: true,
   },
-  build: {
+  build: {  
     target: 'esnext',
     minify: false,
     cssCodeSplit: false,
-  }
+  },
 });
