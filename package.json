@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "scripts": {
     "build": "pnpm --filter \"./apps/*\" build",
-    "dev": "pnpm build && pnpm --parallel --filter \"./apps/*\" preview"
+    "dev": "pnpm build && node scripts/dev.mjs"
   },
   "devDependencies": {
     "typescript": "^5.3.3"

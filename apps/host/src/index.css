@@ -4,4 +4,40 @@
   body {
     font-family: 'Poppins', sans-serif;
   }
+
+  button {
+    @apply cursor-pointer;
+  }
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@keyframes login-card-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-1deg);
+  }
+
+  50% {
+    transform: translateY(-7px) rotate(1deg);
+  }
+}
+
+@keyframes login-card-slide {
+  0%,
+  100% {
+    transform: translateX(10px);
+  }
+
+  50% {
+    transform: translateX(-10px);
+  }
+}
+
+.login-card-track {
+  animation: login-card-slide 5s ease-in-out infinite;
+}
+
+.login-card-float {
+  animation: login-card-float 3.5s ease-in-out infinite;
 }

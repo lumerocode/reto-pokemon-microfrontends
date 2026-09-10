@@ -1,38 +1,37 @@
-import React, { Suspense } from 'react';
+import { useAppStore } from './store/useAppStore';
+import { LoginView } from './components/LoginView';
+import { Layout } from './components/Layout';
+import { CategorySection } from './components/CategorySection';
 
-const RemotePokemonDetail = React.lazy(() => import('mfe_detail/PokemonDetail'));
-const RemotePokemonHistory = React.lazy(() => import('mfe_history/PokemonHistory'));
+const HOME_CATEGORIES = ['fire', 'water', 'grass', 'electric', 'dragon', 'psychic'] as const;
 
 export function App() {
-  return (
-    <main className="min-h-screen bg-slate-900 text-slate-100 p-8">
-      <div className="max-w-3xl mx-auto space-y-8">
-        <header className="border-b border-slate-800 pb-4">
-          <h1 className="text-3xl font-extrabold text-indigo-400">
-            Host Application (Port 3000)
-          </h1>
-          <p className="text-sm text-slate-400 mt-1">
-            Verificando comunicación y renderizado dinámico de microfrontends.
-          </p>
-        </header>
+  const user = useAppStore((state) => state.user);
+  const hasHydrated = useAppStore((state) => state.hasHydrated);
 
-        {/* Microfrontend: Detail */}
-        <section className="space-y-3">
-          <h2 className="text-lg font-semibold text-slate-300">Remote: MFE Detail</h2>
-          <Suspense fallback={<div className="p-4 bg-slate-800 animate-pulse rounded-xl">Cargando MFE Detail...</div>}>
-            <RemotePokemonDetail pokemonId={25} />
-          </Suspense>
-        </section>
-
-        {/* Microfrontend: Record */}
-        <section className="space-y-3">
-          <h2 className="text-lg font-semibold text-slate-300">Remote: MFE Record</h2>
-          <Suspense fallback={<div className="p-4 bg-slate-800 animate-pulse rounded-xl">Cargando MFE Record...</div>}>
-            <RemotePokemonHistory onSelectPokemon={(id) => alert(`Pokemon seleccionado desde MFE Record: #${id}`)} />
-          </Suspense>
-        </section>
+  if (!hasHydrated) {
+    return (
+      <div className="min-h-screen bg-slate-100 dark:bg-slate-950 flex items-center justify-center text-sm text-slate-500 dark:text-slate-400">
+        Loading Pokedex...
       </div>
-    </main>
+    );
+  }
+
+  // Render LoginView if user is not authenticated
+  if (!user) {
+    return <LoginView />;
+  }
+
+  return (
+    <Layout>
+      {/* Home Categories */}
+      <section className="space-y-6">
+        <h2 className="text-xl font-extrabold text-slate-900 dark:text-white">CATEGORIES</h2>
+        {HOME_CATEGORIES.map((category) => (
+          <CategorySection key={category} categoryName={category} />
+        ))}
+      </section>
+    </Layout>
   );
 }
 

@@ -13,6 +13,35 @@ export interface PokemonFetchResponse {
   count: number;
 }
 
+export interface PokemonDetailResponse {
+  id: number;
+  name: string;
+  sprites: {
+    front_default: string | null;
+    other?: {
+      'official-artwork'?: {
+        front_default: string | null;
+      };
+    };
+  };
+}
+
+interface PokemonApiListResponse {
+  count: number;
+  next: string | null;
+  results: Array<{ name: string; url: string }>;
+}
+
+interface PokemonTypeResponse {
+  pokemon: Array<{ pokemon: { name: string; url: string } }>;
+}
+
+const apiFetch = async <T>(url: string, signal?: AbortSignal): Promise<T> => {
+  const response = await fetch(url, { signal });
+  if (!response.ok) throw new Error(`PokéAPI request failed: ${response.status}`);
+  return response.json() as Promise<T>;
+};
+
 // Helper function to extract ID from PokeAPI URL
 export const getPokemonIdFromUrl = (url: string): number => {
   const parts = url.split('/').filter(Boolean);
@@ -20,11 +49,9 @@ export const getPokemonIdFromUrl = (url: string): number => {
 };
 
 // Fetch paginated Pokemon list for Infinite Scroll
-export const fetchPokemonList = async ({ pageParam = 0 }: { pageParam?: number }): Promise<PokemonFetchResponse> => {
+export const fetchPokemonList = async ({ pageParam = 0, signal }: { pageParam?: number; signal?: AbortSignal }): Promise<PokemonFetchResponse> => {
   const limit = 30;
-  const res = await fetch(`${BASE_URL}/pokemon?limit=${limit}&offset=${pageParam}`);
-  if (!res.ok) throw new Error('Failed to load Pokemon list');
-  const data = await res.json();
+  const data = await apiFetch<PokemonApiListResponse>(`${BASE_URL}/pokemon?limit=${limit}&offset=${pageParam}`, signal);
 
   const results = data.results.map((item: { name: string; url: string }) => {
     const id = getPokemonIdFromUrl(item.url);
@@ -43,8 +70,27 @@ export const fetchPokemonList = async ({ pageParam = 0 }: { pageParam?: number }
 };
 
 // Exact search by ID or Name
-export const fetchPokemonDetail = async (idOrName: string | number) => {
-  const res = await fetch(`${BASE_URL}/pokemon/${idOrName.toString().toLowerCase()}`);
-  if (!res.ok) throw new Error('Pokémon not found');
-  return res.json();
+export const fetchPokemonDetail = async (
+  idOrName: string | number,
+  signal?: AbortSignal
+): Promise<PokemonDetailResponse> => {
+  return apiFetch<PokemonDetailResponse>(`${BASE_URL}/pokemon/${idOrName.toString().toLowerCase()}`, signal);
+};
+
+// Fetch top 10 Pokemon by Type (Category)
+export const fetchPokemonByCategory = async (type: string, signal?: AbortSignal): Promise<PokemonListItem[]> => {
+  const data = await apiFetch<PokemonTypeResponse>(`${BASE_URL}/type/${type.toLowerCase()}`, signal);
+
+  // Extract first 10 pokemons for the row
+  const top10 = data.pokemon.slice(0, 10);
+
+  return top10.map((entry: { pokemon: { name: string; url: string } }) => {
+    const id = getPokemonIdFromUrl(entry.pokemon.url);
+    return {
+      name: entry.pokemon.name,
+      url: entry.pokemon.url,
+      id,
+      image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`,
+    };
+  });
 };
