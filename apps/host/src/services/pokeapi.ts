@@ -1,30 +1,5 @@
-const BASE_URL = 'https://pokeapi.co/api/v2';
-
-export interface PokemonListItem {
-  name: string;
-  url: string;
-  id: number;
-  image: string;
-}
-
-export interface PokemonFetchResponse {
-  results: PokemonListItem[];
-  next: number | null; // Changed type from string | null to number | null to match offset pagination
-  count: number;
-}
-
-export interface PokemonDetailResponse {
-  id: number;
-  name: string;
-  sprites: {
-    front_default: string | null;
-    other?: {
-      'official-artwork'?: {
-        front_default: string | null;
-      };
-    };
-  };
-}
+import { POKEAPI_BASE_URL } from '@reto-pokemon/shared';
+import type { PokemonDetailResponse, PokemonFetchResponse, PokemonListItem } from '@reto-pokemon/shared';
 
 interface PokemonApiListResponse {
   count: number;
@@ -51,7 +26,7 @@ export const getPokemonIdFromUrl = (url: string): number => {
 // Fetch paginated Pokemon list for Infinite Scroll
 export const fetchPokemonList = async ({ pageParam = 0, signal }: { pageParam?: number; signal?: AbortSignal }): Promise<PokemonFetchResponse> => {
   const limit = 30;
-  const data = await apiFetch<PokemonApiListResponse>(`${BASE_URL}/pokemon?limit=${limit}&offset=${pageParam}`, signal);
+  const data = await apiFetch<PokemonApiListResponse>(`${POKEAPI_BASE_URL}/pokemon?limit=${limit}&offset=${pageParam}`, signal);
 
   const results = data.results.map((item: { name: string; url: string }) => {
     const id = getPokemonIdFromUrl(item.url);
@@ -74,12 +49,12 @@ export const fetchPokemonDetail = async (
   idOrName: string | number,
   signal?: AbortSignal
 ): Promise<PokemonDetailResponse> => {
-  return apiFetch<PokemonDetailResponse>(`${BASE_URL}/pokemon/${idOrName.toString().toLowerCase()}`, signal);
+  return apiFetch<PokemonDetailResponse>(`${POKEAPI_BASE_URL}/pokemon/${idOrName.toString().toLowerCase()}`, signal);
 };
 
 // Fetch top 10 Pokemon by Type (Category)
 export const fetchPokemonByCategory = async (type: string, signal?: AbortSignal): Promise<PokemonListItem[]> => {
-  const data = await apiFetch<PokemonTypeResponse>(`${BASE_URL}/type/${type.toLowerCase()}`, signal);
+  const data = await apiFetch<PokemonTypeResponse>(`${POKEAPI_BASE_URL}/type/${type.toLowerCase()}`, signal);
 
   // Extract first 10 pokemons for the row
   const top10 = data.pokemon.slice(0, 10);

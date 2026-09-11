@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { usePokemonInfinite } from '../hooks/usePokemonInfinite';
 import { useAppStore } from '../store/useAppStore';
 import { fetchPokemonDetail } from '../services/pokeapi';
-import type { PokemonDetailResponse } from '../services/pokeapi';
+import type { PokemonDetailResponse } from '@reto-pokemon/shared';
 import { Search, X, Loader2 } from 'lucide-react';
 import { PokemonCard } from './PokemonCard';
 

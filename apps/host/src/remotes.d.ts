@@ -1,5 +1,5 @@
 declare module 'mfe_detail/PokemonDetail' {
-  const PokemonDetail: React.ComponentType<{ pokemonId: string | number; onBack?: () => void }>;
+  const PokemonDetail: React.ComponentType<{ pokemonId: string | number }>;
   export default PokemonDetail;
 }
 

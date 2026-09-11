@@ -2,12 +2,15 @@ import { useAppStore } from './store/useAppStore';
 import { LoginView } from './components/LoginView';
 import { Layout } from './components/Layout';
 import { CategorySection } from './components/CategorySection';
+import { PokemonDetailRemote } from './components/remotes/PokemonDetailRemote';
 
 const HOME_CATEGORIES = ['fire', 'water', 'grass', 'electric', 'dragon', 'psychic'] as const;
 
 export function App() {
   const user = useAppStore((state) => state.user);
   const hasHydrated = useAppStore((state) => state.hasHydrated);
+  const selectedPokemonId = useAppStore((state) => state.selectedPokemonId);
+  const setSelectedPokemonId = useAppStore((state) => state.setSelectedPokemonId);
 
   if (!hasHydrated) {
     return (
@@ -24,8 +27,13 @@ export function App() {
 
   return (
     <Layout>
-      {/* Home Categories */}
       <section className="space-y-6">
+        {selectedPokemonId !== null && (
+          <PokemonDetailRemote
+            pokemonId={selectedPokemonId}
+            onBack={() => setSelectedPokemonId(null)}
+          />
+        )}
         <h2 className="text-xl font-extrabold text-slate-900 dark:text-white">CATEGORIES</h2>
         {HOME_CATEGORIES.map((category) => (
           <CategorySection key={category} categoryName={category} />

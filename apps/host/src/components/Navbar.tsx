@@ -51,7 +51,7 @@ export function Navbar() {
             aria-label="Open Pokemon search"
             className="flex items-center space-x-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 px-4 py-2 rounded-xl text-sm font-medium transition-colors cursor-pointer border border-slate-200 dark:border-slate-700/50"
           >
-            <Search className="w-4 h-4 text-slate-500 dark:text-slate-400" />
+            <Search className="w-4 h-4 text-slate-500 dark:text-slate-400 m-0 md:mr-2" />
             <span className="hidden sm:inline">Search Pokemon...</span>
           </button>
 
@@ -84,7 +84,7 @@ export function Navbar() {
                 <SafeImage
                   src={user.avatar}
                   alt={user.name}
-                  className="w-7 h-7 rounded-lg object-cover bg-slate-200 dark:bg-slate-700"
+                  className="w-7 h-7 rounded-lg object-cover bg-slate-200 dark:bg-slate-700 m-0 md:mr-2"
                   loading="eager"
                 />
                 <span className="text-sm font-medium text-slate-700 dark:text-slate-200 hidden md:inline">

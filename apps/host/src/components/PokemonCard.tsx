@@ -1,4 +1,4 @@
-import type { PokemonListItem } from '../services/pokeapi';
+import type { PokemonListItem } from '@reto-pokemon/shared';
 import { SafeImage } from './SafeImage';
 
 interface PokemonCardProps {
