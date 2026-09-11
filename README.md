@@ -39,6 +39,15 @@ VITE_MFE_HISTORY_URL=http://localhost:3002
 
 Estas variables permiten cambiar la ubicación de los microfrontends en staging, Docker o producción. Si no se definen, se utilizan los valores locales mostrados arriba.
 
+## Acceso demo
+
+La aplicación inicia en la pantalla de login. Para acceder al entorno demo utiliza:
+
+```text
+Username: Luis
+Password: retotecnico
+```
+
 ## Despliegue
 
 La aplicación se desplegó en Vercel. La URL pública del shell es:
