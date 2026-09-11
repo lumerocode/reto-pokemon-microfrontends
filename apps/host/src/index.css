@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@source "../../mfe-detail/src";
 @source "../../mfe-history/src";
 
 @layer base {
