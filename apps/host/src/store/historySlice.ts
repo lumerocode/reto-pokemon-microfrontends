@@ -3,6 +3,7 @@ import type { AppState, HistorySlice } from './types';
 
 export const createHistorySlice: StateCreator<AppState, [], [], HistorySlice> = (set) => ({
   history: [],
+  isHistoryOpen: false,
   dismissedToastVisitKey: null,
   addPokemonToHistory: (pokemon) =>
     set((state) => {
@@ -24,5 +25,7 @@ export const createHistorySlice: StateCreator<AppState, [], [], HistorySlice> = 
       };
     }),
   clearHistory: () => set({ history: [] }),
+  openHistory: () => set({ isHistoryOpen: true }),
+  closeHistory: () => set({ isHistoryOpen: false }),
   dismissToast: (visitKey) => set({ dismissedToastVisitKey: visitKey }),
 });

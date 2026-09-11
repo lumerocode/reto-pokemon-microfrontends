@@ -16,7 +16,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
   }
 
   handleReload = () => {
-    this.setState({ hasError: false });
+    window.location.reload();
   };
 
   render() {
@@ -31,7 +31,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
               onClick={this.handleReload}
               className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500"
             >
-              Try again
+              Reload application
             </button>
           </div>
         </div>

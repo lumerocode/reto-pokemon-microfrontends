@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { usePokemonInfinite } from '../hooks/usePokemonInfinite';
+import { useModalLock } from '../hooks/useModalLock';
 import { useAppStore } from '../store/useAppStore';
 import { fetchPokemonDetail } from '../services/pokeapi';
 import type { PokemonDetailResponse } from '@reto-pokemon/shared';
@@ -19,7 +20,8 @@ export function SearchModal() {
   const loadMoreRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const triggerElementRef = useRef<HTMLElement | null>(null);
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isError, refetch } = usePokemonInfinite();
+  useModalLock(isSearchOpen);
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isError, refetch } = usePokemonInfinite(isSearchOpen);
 
   const handleCloseSearch = useCallback(() => {
     setSearchTerm('');
@@ -44,11 +46,7 @@ export function SearchModal() {
     triggerElementRef.current = document.activeElement as HTMLElement;
     searchInputRef.current?.focus();
 
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-
     return () => {
-      document.body.style.overflow = previousOverflow;
       triggerElementRef.current?.focus();
       triggerElementRef.current = null;
     };
@@ -160,7 +158,7 @@ export function SearchModal() {
       <div ref={resultsContainerRef} className="max-w-4xl w-full mx-auto min-h-0 flex-1 overflow-y-auto mt-6 pr-2">
         {searchTerm.trim() !== '' ? (
           <div>
-            <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 mb-4">Exact Match Result</h3>
+            <h3 className="text-sm font-semibold text-white dark:text-slate-400 mb-4">Exact Match Result</h3>
             {isSearchingExact && (
               <div className="flex items-center space-x-2 text-indigo-600 dark:text-indigo-400 font-medium p-4">
                 <Loader2 className="w-5 h-5 animate-spin" />
@@ -184,7 +182,7 @@ export function SearchModal() {
           </div>
         ) : (
           <div>
-            <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 mb-4">All Pokemon</h3>
+            <h3 className="text-sm font-semibold text-white dark:text-slate-400 mb-4">All Pokemon</h3>
             {isLoading ? (
               <div className="flex items-center justify-center space-x-2 py-12 text-slate-500">
                 <Loader2 className="w-5 h-5 animate-spin text-indigo-500" />

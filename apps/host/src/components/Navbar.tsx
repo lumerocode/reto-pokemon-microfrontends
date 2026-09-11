@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useAppStore } from '../store/useAppStore';
-import { Search, Sun, Moon, LogOut, ChevronDown } from 'lucide-react';
+import { Search, Sun, Moon, LogOut, ChevronDown, History } from 'lucide-react';
 import { SafeImage } from './SafeImage';
 
 export function Navbar() {
@@ -9,6 +9,7 @@ export function Navbar() {
   const user = useAppStore((state) => state.user);
   const logout = useAppStore((state) => state.logout);
   const openSearch = useAppStore((state) => state.openSearch);
+  const openHistory = useAppStore((state) => state.openHistory);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
 
@@ -95,6 +96,18 @@ export function Navbar() {
 
               {isDropdownOpen && (
                 <div id="profile-menu" role="menu" className="absolute right-0 mt-2 w-56 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-2xl py-2 z-50 animate-in fade-in slide-in-from-top-2">
+                  <button
+                    type="button"
+                    role="menuitem"
+                    onClick={() => {
+                      openHistory();
+                      setIsDropdownOpen(false);
+                    }}
+                    className="w-full text-left px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800 transition-colors font-medium cursor-pointer flex items-center space-x-2"
+                  >
+                    <History className="w-4 h-4 text-indigo-500" />
+                    <span>View History</span>
+                  </button>
                   <div className="px-4 py-2 border-b border-slate-100 dark:border-slate-800">
                     <p className="text-xs text-slate-400">Signed in as</p>
                     <p className="text-sm font-semibold text-slate-800 dark:text-slate-200 truncate">

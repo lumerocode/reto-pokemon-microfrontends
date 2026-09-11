@@ -1,22 +1,30 @@
 import { lazy, Suspense } from 'react';
 import { ErrorBoundary } from '../ErrorBoundary';
+import { useModalLock } from '../../hooks/useModalLock';
 
 const PokemonHistory = lazy(() => import('mfe_history/PokemonHistory'));
 
 interface PokemonHistoryRemoteProps {
-  onSelectPokemon?: (id: string) => void;
+  history: import('@reto-pokemon/shared').PokemonHistoryItem[];
+  onSelectPokemon?: (id: number) => void;
+  onClose?: () => void;
+  onClearHistory?: () => void;
 }
 
-export function PokemonHistoryRemote({ onSelectPokemon }: PokemonHistoryRemoteProps) {
+export function PokemonHistoryRemote({ history, onSelectPokemon, onClose, onClearHistory }: PokemonHistoryRemoteProps) {
+  useModalLock(true);
+
   return (
     <ErrorBoundary>
-      <Suspense fallback={<RemoteFallback label="Loading Pokemon history..." />}>
-        <PokemonHistory onSelectPokemon={onSelectPokemon} />
+      <Suspense fallback={null}>
+        <PokemonHistory
+          history={history}
+          onSelectPokemon={onSelectPokemon}
+          onClose={onClose}
+          onClearHistory={onClearHistory}
+        />
       </Suspense>
     </ErrorBoundary>
   );
 }
 
-function RemoteFallback({ label }: { label: string }) {
-  return <div className="rounded-2xl border border-slate-200 bg-white p-4 text-sm text-slate-500 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400">{label}</div>;
-}

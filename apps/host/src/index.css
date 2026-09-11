@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@source "../../mfe-detail/src";
+@source "../../mfe-history/src";
 
 @layer base {
   body {
@@ -12,10 +12,6 @@
 }
 
 @custom-variant dark (&:where(.dark, .dark *));
-
-.dark .dark\:text-slate-200 {
-  color: var(--color-slate-200) !important;
-}
 
 @keyframes login-card-float {
   0%,
@@ -37,6 +33,10 @@
   50% {
     transform: translateX(-10px);
   }
+}
+
+.dark .dark\:text-slate-200 {
+  color: var(--color-slate-200) !important;
 }
 
 .login-card-track {

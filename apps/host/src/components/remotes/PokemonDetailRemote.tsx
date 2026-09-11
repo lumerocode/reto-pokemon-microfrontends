@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect } from 'react';
 import { ErrorBoundary } from '../ErrorBoundary';
 import { X } from 'lucide-react';
 import { useAppStore } from '../../store/useAppStore';
+import { useModalLock } from '../../hooks/useModalLock';
 
 const PokemonDetail = lazy(() => import('mfe_detail/PokemonDetail'));
 
@@ -12,15 +13,14 @@ interface PokemonDetailRemoteProps {
 
 export function PokemonDetailRemote({ pokemonId, onBack }: PokemonDetailRemoteProps) {
   const theme = useAppStore((state) => state.theme);
+  useModalLock(true);
 
   useEffect(() => {
-    const previousOverflow = document.body.style.overflow;
     const syncThemeClass = () => {
       document.documentElement.classList.toggle('dark', theme === 'dark');
     };
 
     syncThemeClass();
-    document.body.style.overflow = 'hidden';
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') onBack?.();
@@ -28,7 +28,6 @@ export function PokemonDetailRemote({ pokemonId, onBack }: PokemonDetailRemotePr
 
     document.addEventListener('keydown', handleKeyDown);
     return () => {
-      document.body.style.overflow = previousOverflow;
       syncThemeClass();
       document.removeEventListener('keydown', handleKeyDown);
     };

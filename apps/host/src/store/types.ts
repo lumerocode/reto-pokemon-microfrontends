@@ -32,9 +32,12 @@ export interface SelectionSlice {
 
 export interface HistorySlice {
   history: PokemonHistoryItem[];
+  isHistoryOpen: boolean;
   dismissedToastVisitKey: string | null;
   addPokemonToHistory: (pokemon: { id: number; name: string; image: string }) => void;
   clearHistory: () => void;
+  openHistory: () => void;
+  closeHistory: () => void;
   dismissToast: (visitKey: string) => void;
 }
 

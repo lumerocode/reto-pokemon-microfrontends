@@ -9,7 +9,10 @@ export default defineConfig({
       name: 'mfe_history',
       filename: 'remoteEntry.js',
       exposes: {
-        './PokemonHistory': './src/components/PokemonHistory.tsx',
+        './PokemonHistory': {
+          import: './src/components/PokemonHistory.tsx',
+          dontAppendStylesToHead: true,
+        },
       },
       shared: ['react', 'react-dom', 'zustand', '@tanstack/react-query'],
     }),

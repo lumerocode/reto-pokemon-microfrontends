@@ -3,6 +3,7 @@ import { LoginView } from './components/LoginView';
 import { Layout } from './components/Layout';
 import { CategorySection } from './components/CategorySection';
 import { PokemonDetailRemote } from './components/remotes/PokemonDetailRemote';
+import { PokemonHistoryRemote } from './components/remotes/PokemonHistoryRemote';
 
 const HOME_CATEGORIES = ['fire', 'water', 'grass', 'electric', 'dragon', 'psychic'] as const;
 
@@ -11,6 +12,11 @@ export function App() {
   const hasHydrated = useAppStore((state) => state.hasHydrated);
   const selectedPokemonId = useAppStore((state) => state.selectedPokemonId);
   const setSelectedPokemonId = useAppStore((state) => state.setSelectedPokemonId);
+  const history = useAppStore((state) => state.history);
+  const addPokemonToHistory = useAppStore((state) => state.addPokemonToHistory);
+  const isHistoryOpen = useAppStore((state) => state.isHistoryOpen);
+  const closeHistory = useAppStore((state) => state.closeHistory);
+  const clearHistory = useAppStore((state) => state.clearHistory);
 
   if (!hasHydrated) {
     return (
@@ -28,6 +34,21 @@ export function App() {
   return (
     <Layout>
       <section className="space-y-6">
+        {isHistoryOpen && (
+          <PokemonHistoryRemote
+            history={history}
+            onClose={closeHistory}
+            onClearHistory={clearHistory}
+            onSelectPokemon={(id) => {
+              const pokemon = history.find((item) => item.id === id);
+              if (pokemon) {
+                addPokemonToHistory(pokemon);
+              }
+              setSelectedPokemonId(id);
+              closeHistory();
+            }}
+          />
+        )}
         {selectedPokemonId !== null && (
           <PokemonDetailRemote
             pokemonId={selectedPokemonId}
