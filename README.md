@@ -52,7 +52,7 @@ Password: retotecnico
 
 La aplicación se desplegó en Vercel. La URL pública del shell es:
 
-`https://reto-pokemon-microfrontends.vercel.app/`
+`https://reto-pokemon-microfrontends-host.vercel.app/`
 
 Como el proyecto utiliza Module Federation, `host`, `mfe-detail` y `mfe-history` se desplegó como proyectos independientes en Vercel. 
 En el proyecto del host, las variables `VITE_MFE_DETAIL_URL` y `VITE_MFE_HISTORY_URL` deben apuntar a las URLs públicas de los dos microfrontends, nunca a `localhost`.
